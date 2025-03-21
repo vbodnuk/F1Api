@@ -13,10 +13,4 @@ builder.Services.AddScoped<F1ApiReader>();
 
 var app = builder.Build();
 
-/*app.MapGet("/", async (F1ApiReader reader) =>
-{
-    var result = await F1ApiReader.GetConstructors();
-    return Results.Ok(result);
-});*/
-
 app.Run();

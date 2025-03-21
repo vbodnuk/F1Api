@@ -6,12 +6,15 @@ using JsonConverter = System.Text.Json.Serialization.JsonConverter;
 
 namespace Formula1ApiConnection.Repositories;
 
+
 public class F1ApiReader
 {
     private static readonly HttpClient Client = new HttpClient();
     
-    public async Task<List<TeamModel>> GetTeams(string url)
+    public async Task<List<TeamModel>> GetTeams()
     {
+        const string url = "";
+        
         try
         {
             var response = await Client.GetAsync(url);
@@ -36,8 +39,9 @@ public class F1ApiReader
 
     }
 
-    public async Task<List<ChampionshipModel>> GetSeasons(string url)
+    public async Task<List<ChampionshipModel>> GetSeasons()
     {
+        const string url = "";
         try
         {
             var response = await Client.GetAsync(url);
@@ -62,11 +66,11 @@ public class F1ApiReader
 
     }
 
-    public async Task<List<ConstructorsResponseModel>> GetConstructors()
+    public async Task<List<ConstructorsResponseModel>> GetConstructorsChampionshipByYear(int year)
     {
         try
         {
-            const string url = "https://f1api.dev/api/2024/constructors-championship";
+            var url = $"https://f1api.dev/api/{year}/constructors-championship";
             var response = await Client.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
@@ -87,8 +91,35 @@ public class F1ApiReader
             throw;
         }
     }
+    
+    public async Task<List<ConstructorsResponseModel>> GetCurrentConstructorsChampionship()
+    {
+        const string url = "https://f1api.dev/api/constructors-championship";
 
-    public async Task<List<ConstructorsResponseModel>> GetConstructorsByYear(string year)
+        try
+        {
+            var response = await Client.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Log.Logger.Warning($"Failed to get current constructors data! Status Code: {response.StatusCode}");
+
+                return new List<ConstructorsResponseModel>();
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+            var models = JsonConvert.DeserializeObject<List<ConstructorsResponseModel>>(result)!.ToList();
+            
+            return models;
+        }
+        catch(Exception e)
+        {
+            Log.Logger.Error(e,"Can't get current constructors data.");
+            throw;
+        }
+    }
+
+    public async Task<List<ConstructorsResponseModel>> GetConstructorsByYear(int year)
     {
         var url = $"https://f1api.dev/api/{year}/constructors-championship";
         
@@ -113,5 +144,60 @@ public class F1ApiReader
             Log.Logger.Error(e,"Can't get constructors data.");
             throw;
         }
+    }
+
+    public async Task<List<DriversChampionshipsModel>> GetCurrentDriversChampionship()
+    {
+        const string url = $"https://f1api.dev/api/current/drivers-championship";
+
+        try
+        {
+            var response = await Client.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Log.Logger.Warning($"Failed to get current championship data! Status Code: {response.StatusCode}");
+
+                return new List<DriversChampionshipsModel>();
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+            var models = JsonConvert.DeserializeObject<List<DriversChampionshipsModel>>(result)!.ToList();
+
+            return models;
+        }
+        catch (Exception e)
+        {
+            Log.Logger.Error(e,"Can't get current championship data.");
+            throw;
+        }
+    }
+    
+    public async Task<List<DriversChampionshipsModel>> GetDriversChampionshipByYear(int year)
+    {
+        var url = $"https://f1api.dev/api/{year}/current/drivers-championship";
+
+        try
+        {
+            var response = await Client.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Log.Logger.Warning($"Failed to get driver championship data! Status Code: {response.StatusCode}");
+
+                return new List<DriversChampionshipsModel>();
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+            var models = JsonConvert.DeserializeObject<List<DriversChampionshipsModel>>(result)!.ToList();
+
+            return models;
+        }
+        catch (Exception e)
+        {
+            Log.Logger.Error(e,"Can't get driver championship data.");
+            throw;
+        }
+        
     }
 }

@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formula1ApiConnection", "Formula1ApiConnection\Formula1ApiConnection.csproj", "{8E4EA5CA-1C38-4CC1-8919-3D5518C42032}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{22C5DF08-60E7-4DF6-B92A-B9EB1C3FB3E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formula1Grpc", "Formula1Grpc\Formula1Grpc.csproj", "{C52E2DC6-62FC-4FF6-B650-E0D35669C733}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,12 @@ Global
 		{8E4EA5CA-1C38-4CC1-8919-3D5518C42032}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E4EA5CA-1C38-4CC1-8919-3D5518C42032}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E4EA5CA-1C38-4CC1-8919-3D5518C42032}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C52E2DC6-62FC-4FF6-B650-E0D35669C733}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C52E2DC6-62FC-4FF6-B650-E0D35669C733}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C52E2DC6-62FC-4FF6-B650-E0D35669C733}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C52E2DC6-62FC-4FF6-B650-E0D35669C733}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C52E2DC6-62FC-4FF6-B650-E0D35669C733} = {22C5DF08-60E7-4DF6-B92A-B9EB1C3FB3E2}
 	EndGlobalSection
 EndGlobal
