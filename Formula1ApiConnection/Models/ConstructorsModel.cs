@@ -12,7 +12,7 @@ public class ConstructorsModel
     public string TeamId { get; set; }
     
     [JsonProperty("points")]
-    public decimal Points { get; set; }
+    public int Points { get; set; }
     
     [JsonProperty("position")]
     public int Position { get; set; }

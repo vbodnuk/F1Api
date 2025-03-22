@@ -1,4 +1,42 @@
 syntax = "proto3";
 
+option csharp_namespace = "F1GrpcServer";
 
-    
+message DriverChampionships {
+   int32 ClassificationId = 1;
+   string DriverId = 2;
+   string TeamId = 3;
+   int32 Points = 4;
+   int32 Position = 5;
+   int32 Wins = 6;
+}
+
+message ConstructorsChampionship {
+  int32 ClassificationId = 1;
+  string TeamId = 2;
+  int32 Points = 3;
+  int32 Position = 4;
+  int32 Wins = 5;
+}
+
+message DriversChampionshipsRequest {
+   optional int32 Year = 1;
+}
+
+message ConstructorsChampionshipRequest {
+   optional int32 Year = 1;
+}
+
+message DriversChampionshipsResponse {
+   repeated DriverChampionships Drivers = 1;
+}
+
+message ConstructorsChampionshipResponse {
+   repeated ConstructorsChampionship Constructors = 1;
+}
+
+service F1Grpc {
+   rpc GetDriversChampionship(DriversChampionshipsRequest) returns(DriversChampionshipsResponse);
+   rpc GetConstructorsChampionship(ConstructorsChampionshipRequest) returns(ConstructorsChampionshipResponse);
+   
+}
