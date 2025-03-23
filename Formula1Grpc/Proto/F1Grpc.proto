@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option csharp_namespace = "F1GrpcServer";
 
-message DriverChampionships {
+message DriversChampionships {
    int32 ClassificationId = 1;
    string DriverId = 2;
    string TeamId = 3;
@@ -28,7 +28,7 @@ message ConstructorsChampionshipRequest {
 }
 
 message DriversChampionshipsResponse {
-   repeated DriverChampionships Drivers = 1;
+   repeated DriversChampionships Drivers = 1;
 }
 
 message ConstructorsChampionshipResponse {

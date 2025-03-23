@@ -11,34 +11,40 @@ public class F1GrpcService : F1Grpc.F1GrpcBase
     public override async Task<DriversChampionshipsResponse> GetDriversChampionship(DriversChampionshipsRequest request, 
         ServerCallContext context)
     {
-        List<DriversChampionshipsModel> drivers;
+        DriversResponseModel? driversResponseModel = null;
         
         if (request.HasYear)
         {
             var apiResult = await F1ApiReader.GetDriversChampionshipByYear(request.Year);
 
-            drivers = apiResult;
+            driversResponseModel = apiResult;
         }
         else
         {
             var apiResult = await F1ApiReader.GetCurrentDriversChampionship();
 
-            drivers = apiResult;
+            driversResponseModel = apiResult;
         }
 
-        var result = drivers.Select(d => new DriverChampionships()
+        List<DriversChampionships> drivers = new();
+
+        if (driversResponseModel != null)
         {
-            DriverId = d.DriverId,
-            ClassificationId = d.ClassificationId,
-            Points = d.Points,
-            Position = d.Position,
-            Wins = d.Wins,
-            TeamId = d.TeamId
-        });
+            drivers.AddRange(driversResponseModel.DriversChampionships.Select(d=>
+                new DriversChampionships()
+                {
+                    ClassificationId = d.ClassificationId,
+                    Points = d.Points,
+                    Position = d.Position,
+                    Wins = d.Wins ?? 0,
+                    TeamId = d.TeamId,
+                    DriverId = d.DriverId
+                }));
+        }
         
         DriversChampionshipsResponse response = new DriversChampionshipsResponse()
         {
-            Drivers = { result }
+            Drivers = { drivers }
         };
 
         return await Task.FromResult(response);
@@ -72,7 +78,7 @@ public class F1GrpcService : F1Grpc.F1GrpcBase
                 TeamId = constructors.TeamId,
                 Points = constructors.Points,
                 Position = constructors.Position,
-                Wins = (int)constructors.Wins!,
+                Wins = constructors.Wins ?? 0,
                 ClassificationId = constructors.ClassificationId
             }));
         }

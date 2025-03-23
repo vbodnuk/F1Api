@@ -16,9 +16,8 @@ builder.Services.AddGrpc();
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
-app.UseGrpcWeb();
 
-app.MapGrpcService<F1GrpcService>().EnableGrpcWeb();
-app.UseSerilogRequestLogging();
+app.MapGrpcService<F1GrpcService>();
+app.MapGet("/", () => "This is a gRPC server. Use a gRPC client to communicate.");
 
 app.Run();

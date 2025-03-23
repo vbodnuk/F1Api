@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Formula1ApiConnection.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Serilog;
 using JsonConverter = System.Text.Json.Serialization.JsonConverter;
 
@@ -94,7 +95,7 @@ public class F1ApiReader
     
     public static async Task<ConstructorsResponseModel?> GetCurrentConstructorsChampionship()
     {
-        const string url = "https://f1api.dev/api/constructors-championship";
+        const string url = "https://f1api.dev/api/current/constructors-championship";
 
         try
         {
@@ -119,9 +120,9 @@ public class F1ApiReader
         }
     }
 
-    public static async Task<List<DriversChampionshipsModel>> GetCurrentDriversChampionship()
+    public static async Task<DriversResponseModel> GetCurrentDriversChampionship()
     {
-        const string url = $"https://f1api.dev/api/current/drivers-championship";
+        const string url = "https://f1api.dev/api/current/drivers-championship";
 
         try
         {
@@ -131,12 +132,14 @@ public class F1ApiReader
             {
                 Log.Logger.Warning($"Failed to get current championship data! Status Code: {response.StatusCode}");
 
-                return new List<DriversChampionshipsModel>();
+                return new DriversResponseModel();
             }
 
             var result = await response.Content.ReadAsStringAsync();
-            var models = JsonConvert.DeserializeObject<List<DriversChampionshipsModel>>(result)!.ToList();
+            //var jsonObj = JsonConvert.DeserializeObject<JObject>(result);
+            var models = JsonConvert.DeserializeObject<DriversResponseModel>(result);
 
+            //var models = jsonObj["drivers_championship"].ToObject<List<DriversChampionshipsModel>>();
             return models;
         }
         catch (Exception e)
@@ -146,7 +149,7 @@ public class F1ApiReader
         }
     }
     
-    public static async Task<List<DriversChampionshipsModel>> GetDriversChampionshipByYear(int year)
+    public static async Task<DriversResponseModel> GetDriversChampionshipByYear(int year)
     {
         var url = $"https://f1api.dev/api/{year}/current/drivers-championship";
 
@@ -158,11 +161,11 @@ public class F1ApiReader
             {
                 Log.Logger.Warning($"Failed to get driver championship data! Status Code: {response.StatusCode}");
 
-                return new List<DriversChampionshipsModel>();
+                return new DriversResponseModel();
             }
 
             var result = await response.Content.ReadAsStringAsync();
-            var models = JsonConvert.DeserializeObject<List<DriversChampionshipsModel>>(result)!.ToList();
+            var models = JsonConvert.DeserializeObject<DriversResponseModel>(result);
 
             return models;
         }
