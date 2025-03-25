@@ -9,6 +9,15 @@ message DriversChampionships {
    int32 Points = 4;
    int32 Position = 5;
    int32 Wins = 6;
+   Driver DriverInfo = 7;
+}
+
+message Driver {
+  string Name = 1;
+  string Surname = 2;
+  string Nationality = 3;
+  int32 Number = 4;
+  string url = 5;
 }
 
 message ConstructorsChampionship {
@@ -17,6 +26,13 @@ message ConstructorsChampionship {
   int32 Points = 3;
   int32 Position = 4;
   int32 Wins = 5;
+  Team TeamInfo = 6;
+}
+
+message Team {
+  string Name = 1;
+  string Country = 2;
+  string Url = 3;
 }
 
 message DriversChampionshipsRequest {

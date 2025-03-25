@@ -20,17 +20,8 @@ public class ConstructorsModel
     [JsonProperty("wins")]
     public int? Wins { get; set; }
     
-    [JsonExtensionData]
-    public Dictionary<string,JToken> Data { get; set; }
-
-    public List<T>? GetData<T>(string key)
-    {
-        if (Data != null && Data.ContainsKey(key))
-        {
-            return Data[key].ToObject<List<T>>();
-        }
-        return new List<T>();
-    }
+    [JsonProperty("team")]
+    public TeamModel Team { get; set; }
 }
 
 public class ConstructorsResponseModel : ApiCoreResponseModel

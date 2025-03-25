@@ -1,9 +1,13 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Formula1ApiConnection.Models;
 
 public class TeamModel
 {
+    [JsonIgnore]
+    public string TeamNationality { get; set; }
+    
     [JsonProperty("teamId")]
     public string TeamId { get; set; }
     
@@ -11,7 +15,15 @@ public class TeamModel
     public string TeamName { get; set; }
     
     [JsonProperty("teamNationality")]
-    public string TeamNationality { get; set; }
+    private string TeamNationalitySetter {
+        set => TeamNationality = value;
+    }
+    
+    [JsonProperty("country")]
+    private string Country
+    {
+        set => TeamNationality = value;
+    }
     
     [JsonProperty("firstAppeareance")]
     public int? FirstAppeareance { get; set; }
@@ -24,4 +36,5 @@ public class TeamModel
     
     [JsonProperty("url")]
     public string Url { get; set; }
+    
 }

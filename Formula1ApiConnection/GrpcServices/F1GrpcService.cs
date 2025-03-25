@@ -38,7 +38,15 @@ public class F1GrpcService : F1Grpc.F1GrpcBase
                     Position = d.Position,
                     Wins = d.Wins ?? 0,
                     TeamId = d.TeamId,
-                    DriverId = d.DriverId
+                    DriverId = d.DriverId,
+                    DriverInfo = new Driver()
+                    {
+                        Name = d.Driver.Name,
+                        Nationality = d.Driver.Nationality,
+                        Number = d.Driver.Number,
+                        Surname = d.Driver.Surname,
+                        Url = d.Driver.Url
+                    }
                 }));
         }
         
@@ -79,7 +87,13 @@ public class F1GrpcService : F1Grpc.F1GrpcBase
                 Points = constructors.Points,
                 Position = constructors.Position,
                 Wins = constructors.Wins ?? 0,
-                ClassificationId = constructors.ClassificationId
+                ClassificationId = constructors.ClassificationId,
+                TeamInfo = new Team()
+                {
+                    Name = constructors.Team.TeamName,
+                    Url = constructors.Team.Url,
+                    Country = constructors.Team.TeamNationality,
+                }
             }));
         }
 

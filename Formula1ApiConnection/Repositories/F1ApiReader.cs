@@ -136,10 +136,7 @@ public class F1ApiReader
             }
 
             var result = await response.Content.ReadAsStringAsync();
-            //var jsonObj = JsonConvert.DeserializeObject<JObject>(result);
             var models = JsonConvert.DeserializeObject<DriversResponseModel>(result);
-
-            //var models = jsonObj["drivers_championship"].ToObject<List<DriversChampionshipsModel>>();
             return models;
         }
         catch (Exception e)
