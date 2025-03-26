@@ -17,6 +17,8 @@ It provides an easy way to access necessary information and includes gRPC for co
 
 The service uses gRPC for communication with external clients. To generate a gRPC client, use the following command:  
 
+**Note:** Adjust paths if necessary. `./Protos` is the default folder for `.proto` files, and `./Generated` is the output folder for generated C# files.  
+
 ```sh
 protoc --proto_path=./Protos --csharp_out=./Generated \
 --grpc_out=./Generated --plugin=protoc-gen-grpc=grpc_csharp_plugin \
