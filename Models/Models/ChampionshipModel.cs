@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Formula1ApiConnection.Models;
+namespace Models.Models;
 
 public class ChampionshipModel
 {

@@ -1,9 +1,12 @@
 using Newtonsoft.Json;
 
-namespace Formula1ApiConnection.Models;
+namespace Models.Models;
 
 public class DriversModel
 {
+    [JsonProperty("driverId")]
+    public string DriverId { get; set; }
+    
     [JsonProperty("name")]
     public string Name { get; set; }
     

@@ -1,7 +1,6 @@
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-namespace Formula1ApiConnection.Models;
+namespace Models.Models;
 
 public class TeamModel
 {

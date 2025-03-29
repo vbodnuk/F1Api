@@ -1,8 +1,8 @@
 
 using F1GrpcServer;
-using Formula1ApiConnection.Models;
 using Formula1ApiConnection.Repositories;
 using Grpc.Core;
+using Models.Models;
 
 namespace Formula1ApiConnection.GrpcServices;
 
@@ -15,13 +15,13 @@ public class F1GrpcService : F1Grpc.F1GrpcBase
         
         if (request.HasYear)
         {
-            var apiResult = await F1ApiReader.GetDriversChampionshipByYear(request.Year);
+            var apiResult = await F1ApiReader.GetDriversChampionshipByYearAsync(request.Year);
 
             driversResponseModel = apiResult;
         }
         else
         {
-            var apiResult = await F1ApiReader.GetCurrentDriversChampionship();
+            var apiResult = await F1ApiReader.GetCurrentDriversChampionshipAsync();
 
             driversResponseModel = apiResult;
         }
@@ -66,12 +66,12 @@ public class F1GrpcService : F1Grpc.F1GrpcBase
         
         if (request.HasYear)
         {
-            var apiResult = await F1ApiReader.GetConstructorsChampionshipByYear(request.Year);
+            var apiResult = await F1ApiReader.GetConstructorsChampionshipByYearAsync(request.Year);
             constructorsResponseModel = apiResult;
         }
         else
         {
-            var apiResult = await F1ApiReader.GetCurrentConstructorsChampionship();
+            var apiResult = await F1ApiReader.GetCurrentConstructorsChampionshipAsync();
             constructorsResponseModel = apiResult;
         }
         

@@ -1,9 +1,6 @@
-using System.Text.Json;
-using Formula1ApiConnection.Models;
+using Models.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Serilog;
-using JsonConverter = System.Text.Json.Serialization.JsonConverter;
 
 namespace Formula1ApiConnection.Repositories;
 
@@ -39,35 +36,7 @@ public class F1ApiReader
         }
 
     }
-
-    public async Task<List<ChampionshipModel>> GetSeasons()
-    {
-        const string url = "";
-        try
-        {
-            var response = await Client.GetAsync(url);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                Log.Logger.Warning($"Failed to get seasons data! Status Code: {response.StatusCode}");
-
-                return new List<ChampionshipModel>();
-            }
-            var result = await response.Content.ReadAsStringAsync();
-
-            var championships = JsonConvert.DeserializeObject<List<ChampionshipModel>>(result)!.ToList();
-
-            return championships;
-        }
-        catch (Exception e)
-        {
-            Log.Logger.Error(e,"Can't get seasons data!");
-            throw;
-        }
-
-    }
-
-    public static async Task<ConstructorsResponseModel?> GetConstructorsChampionshipByYear(int year)
+    public static async Task<ConstructorsResponseModel?> GetConstructorsChampionshipByYearAsync(int year)
     {
         try
         {
@@ -76,24 +45,24 @@ public class F1ApiReader
 
             if (!response.IsSuccessStatusCode)
             {
-                Log.Logger.Warning($"Failed to get constructors data! Status Code: {response.StatusCode}");
+                Log.Logger.Warning($"Can't get constructors championship! Status Code: {response.StatusCode}");
 
                 return new ConstructorsResponseModel();
             }
 
             var result = await response.Content.ReadAsStringAsync();
-            var models = JsonConvert.DeserializeObject<ConstructorsResponseModel>(result);
+            var constructors = JsonConvert.DeserializeObject<ConstructorsResponseModel>(result);
             
-            return models;
+            return constructors;
         }
         catch(Exception e)
         {
-            Log.Logger.Error(e,"Can't get constructors data.");
+            Log.Logger.Error(e,"Failed to get constructors data!");
             throw;
         }
     }
     
-    public static async Task<ConstructorsResponseModel?> GetCurrentConstructorsChampionship()
+    public static async Task<ConstructorsResponseModel?> GetCurrentConstructorsChampionshipAsync()
     {
         const string url = "https://f1api.dev/api/current/constructors-championship";
 
@@ -103,24 +72,24 @@ public class F1ApiReader
 
             if (!response.IsSuccessStatusCode)
             {
-                Log.Logger.Warning($"Failed to get current constructors data! Status Code: {response.StatusCode}");
+                Log.Logger.Warning($"Can't get current constructors championship!  Status Code: {response.StatusCode}");
 
                 return new ConstructorsResponseModel();
             }
 
             var result = await response.Content.ReadAsStringAsync();
-            var models = JsonConvert.DeserializeObject<ConstructorsResponseModel>(result);
+            var constructors = JsonConvert.DeserializeObject<ConstructorsResponseModel>(result);
             
-            return models;
+            return constructors;
         }
         catch(Exception e)
         {
-            Log.Logger.Error(e,"Can't get current constructors data.");
+            Log.Logger.Error(e,"Failed to get current constructors data!");
             throw;
         }
     }
 
-    public static async Task<DriversResponseModel> GetCurrentDriversChampionship()
+    public static async Task<DriversResponseModel> GetCurrentDriversChampionshipAsync()
     {
         const string url = "https://f1api.dev/api/current/drivers-championship";
 
@@ -130,25 +99,25 @@ public class F1ApiReader
 
             if (!response.IsSuccessStatusCode)
             {
-                Log.Logger.Warning($"Failed to get current championship data! Status Code: {response.StatusCode}");
+                Log.Logger.Warning($"Can't get current drivers championship! Status Code: {response.StatusCode}");
 
                 return new DriversResponseModel();
             }
 
             var result = await response.Content.ReadAsStringAsync();
-            var models = JsonConvert.DeserializeObject<DriversResponseModel>(result);
-            return models;
+            var drivers = JsonConvert.DeserializeObject<DriversResponseModel>(result);
+            return drivers;
         }
         catch (Exception e)
         {
-            Log.Logger.Error(e,"Can't get current championship data.");
+            Log.Logger.Error(e,"Failed to get current drivers championship data!");
             throw;
         }
     }
     
-    public static async Task<DriversResponseModel> GetDriversChampionshipByYear(int year)
+    public static async Task<DriversResponseModel?> GetDriversChampionshipByYearAsync(int year)
     {
-        var url = $"https://f1api.dev/api/{year}/current/drivers-championship";
+        var url = $"https://f1api.dev/api/{year}/drivers-championship";
 
         try
         {
@@ -156,21 +125,71 @@ public class F1ApiReader
 
             if (!response.IsSuccessStatusCode)
             {
-                Log.Logger.Warning($"Failed to get driver championship data! Status Code: {response.StatusCode}");
-
+                Log.Logger.Warning($"Can't get drivers championship! Status Code: {response.StatusCode}");
                 return new DriversResponseModel();
             }
 
             var result = await response.Content.ReadAsStringAsync();
-            var models = JsonConvert.DeserializeObject<DriversResponseModel>(result);
+            var drivers = JsonConvert.DeserializeObject<DriversResponseModel>(result);
 
-            return models;
+            return drivers;
         }
         catch (Exception e)
         {
-            Log.Logger.Error(e,"Can't get driver championship data.");
+            Log.Logger.Error(e,"Failed to get drivers championship data!");
             throw;
         }
-        
+    }
+
+    public static async Task<CoreRaceResponseModel> GetRacesResultsByYearByRoundAsync(int year, int round)
+    {
+        var url = $"https://f1api.dev/api/{year}/{round}/race";
+
+        try
+        {
+            var response = await Client.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Log.Logger.Warning(
+                    $"Can't get race round {round} in year {year}! Status Code: {response.StatusCode}");
+                return new CoreRaceResponseModel();
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+            var races = JsonConvert.DeserializeObject<CoreRaceResponseModel>(result);
+
+            return races;
+        }
+        catch (Exception e)
+        {
+            Log.Logger.Error(e,"Failed to get race result!");
+            throw;
+        }
+    }
+
+    public static async Task<CoreRaceResponseModel> GetCurrentRaceResultAsync()
+    {
+        const string  url = "https://f1api.dev/api/current/last/race";
+        try
+        {
+            var response = await Client.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Log.Logger.Warning($"Can't get current race result! Status Code: {response.StatusCode}");
+                return new CoreRaceResponseModel();
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+            var raceResult = JsonConvert.DeserializeObject<CoreRaceResponseModel>(result);
+
+            return raceResult;
+        }
+        catch (Exception e)
+        {
+            Log.Logger.Error(e,"Failed to get current race result!");
+            throw;
+        }
     }
 }
