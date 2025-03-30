@@ -5,191 +5,72 @@ using Serilog;
 namespace Formula1ApiConnection.Repositories;
 
 
-public class F1ApiReader
+public static class F1ApiReader
 {
     private static readonly HttpClient Client = new HttpClient();
     
-    public async Task<List<TeamModel>> GetTeams()
+    private static async Task<T> GetApiData<T>(string url) where T : new()
     {
-        const string url = "";
-        
+        var methodString = url.Substring(url.LastIndexOf('/') + 1).Replace('-', ' ');
         try
         {
             var response = await Client.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
             {
-                Log.Logger.Warning($"Failed to get teams data! Status Code: {response.StatusCode}");
-                return new List<TeamModel>();
+                Log.Logger.Warning($"Can't get {methodString}! Status Code: {response.StatusCode}");
+
+                return new T();
             }
 
             var result = await response.Content.ReadAsStringAsync();
-
-            var teams = JsonConvert.DeserializeObject<List<TeamModel>>(result)!.ToList();
-
-            return teams;
+            return JsonConvert.DeserializeObject<T>(result);
         }
         catch (Exception e)
         {
-            Log.Logger.Error(e,"Can't get teams data!");
+            Log.Logger.Error(e,$"Failed to get {methodString} data!");
             throw;
         }
-
     }
-    public static async Task<ConstructorsResponseModel?> GetConstructorsChampionshipByYearAsync(int year)
+
+    public static async Task<ConstructorsResponseModel> GetConstructorsChampionshipByYearAsync(int year)
     {
-        try
-        {
-            var url = $"https://f1api.dev/api/{year}/constructors-championship";
-            var response = await Client.GetAsync(url);
+        return await GetApiData<ConstructorsResponseModel>($"https://f1api.dev/api/{year}/constructors-championship");
+    }
 
-            if (!response.IsSuccessStatusCode)
-            {
-                Log.Logger.Warning($"Can't get constructors championship! Status Code: {response.StatusCode}");
+    public static async Task<ConstructorsResponseModel> GetCurrentConstructorsChampionshipAsync()
+    {
+        return await GetApiData<ConstructorsResponseModel>("https://f1api.dev/api/current/constructors-championship");
+    }
 
-                return new ConstructorsResponseModel();
-            }
+    public static async Task<DriversChampionshipResponseModel> GetCurrentDriversChampionshipAsync()
+    {
+        return await GetApiData<DriversChampionshipResponseModel>("https://f1api.dev/api/current/drivers-championship");
+    }
 
-            var result = await response.Content.ReadAsStringAsync();
-            var constructors = JsonConvert.DeserializeObject<ConstructorsResponseModel>(result);
-            
-            return constructors;
-        }
-        catch(Exception e)
-        {
-            Log.Logger.Error(e,"Failed to get constructors data!");
-            throw;
-        }
+    public static async Task<DriversChampionshipResponseModel> GetDriversChampionshipByYearAsync(int year)
+    {
+        return await GetApiData<DriversChampionshipResponseModel>($"https://f1api.dev/api/{year}/drivers-championship");
+    }
+
+    public static async Task<RaceResponseModel> GetRacesResultsByYearByRoundAsync(int year, int round)
+    {
+        return await GetApiData<RaceResponseModel>($"https://f1api.dev/api/{year}/{round}/race");
+    }
+
+    public static async Task<RaceResponseModel> GetCurrentRaceResultAsync()
+    {
+        return await GetApiData<RaceResponseModel>("https://f1api.dev/api/current/last/race");
+    }
+
+    public static async Task<DriversResponseModel> GetDriversByYear(int year)
+    {
+        return await GetApiData<DriversResponseModel>($"https://f1api.dev/api/{year}/drivers");
+    }
+
+    public static async Task<DriversResponseModel> GetCurrentDriversAsync()
+    {
+        return await GetApiData<DriversResponseModel>("https://f1api.dev/api/drivers");
     }
     
-    public static async Task<ConstructorsResponseModel?> GetCurrentConstructorsChampionshipAsync()
-    {
-        const string url = "https://f1api.dev/api/current/constructors-championship";
-
-        try
-        {
-            var response = await Client.GetAsync(url);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                Log.Logger.Warning($"Can't get current constructors championship!  Status Code: {response.StatusCode}");
-
-                return new ConstructorsResponseModel();
-            }
-
-            var result = await response.Content.ReadAsStringAsync();
-            var constructors = JsonConvert.DeserializeObject<ConstructorsResponseModel>(result);
-            
-            return constructors;
-        }
-        catch(Exception e)
-        {
-            Log.Logger.Error(e,"Failed to get current constructors data!");
-            throw;
-        }
-    }
-
-    public static async Task<DriversResponseModel> GetCurrentDriversChampionshipAsync()
-    {
-        const string url = "https://f1api.dev/api/current/drivers-championship";
-
-        try
-        {
-            var response = await Client.GetAsync(url);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                Log.Logger.Warning($"Can't get current drivers championship! Status Code: {response.StatusCode}");
-
-                return new DriversResponseModel();
-            }
-
-            var result = await response.Content.ReadAsStringAsync();
-            var drivers = JsonConvert.DeserializeObject<DriversResponseModel>(result);
-            return drivers;
-        }
-        catch (Exception e)
-        {
-            Log.Logger.Error(e,"Failed to get current drivers championship data!");
-            throw;
-        }
-    }
-    
-    public static async Task<DriversResponseModel?> GetDriversChampionshipByYearAsync(int year)
-    {
-        var url = $"https://f1api.dev/api/{year}/drivers-championship";
-
-        try
-        {
-            var response = await Client.GetAsync(url);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                Log.Logger.Warning($"Can't get drivers championship! Status Code: {response.StatusCode}");
-                return new DriversResponseModel();
-            }
-
-            var result = await response.Content.ReadAsStringAsync();
-            var drivers = JsonConvert.DeserializeObject<DriversResponseModel>(result);
-
-            return drivers;
-        }
-        catch (Exception e)
-        {
-            Log.Logger.Error(e,"Failed to get drivers championship data!");
-            throw;
-        }
-    }
-
-    public static async Task<CoreRaceResponseModel> GetRacesResultsByYearByRoundAsync(int year, int round)
-    {
-        var url = $"https://f1api.dev/api/{year}/{round}/race";
-
-        try
-        {
-            var response = await Client.GetAsync(url);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                Log.Logger.Warning(
-                    $"Can't get race round {round} in year {year}! Status Code: {response.StatusCode}");
-                return new CoreRaceResponseModel();
-            }
-
-            var result = await response.Content.ReadAsStringAsync();
-            var races = JsonConvert.DeserializeObject<CoreRaceResponseModel>(result);
-
-            return races;
-        }
-        catch (Exception e)
-        {
-            Log.Logger.Error(e,"Failed to get race result!");
-            throw;
-        }
-    }
-
-    public static async Task<CoreRaceResponseModel> GetCurrentRaceResultAsync()
-    {
-        const string  url = "https://f1api.dev/api/current/last/race";
-        try
-        {
-            var response = await Client.GetAsync(url);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                Log.Logger.Warning($"Can't get current race result! Status Code: {response.StatusCode}");
-                return new CoreRaceResponseModel();
-            }
-
-            var result = await response.Content.ReadAsStringAsync();
-            var raceResult = JsonConvert.DeserializeObject<CoreRaceResponseModel>(result);
-
-            return raceResult;
-        }
-        catch (Exception e)
-        {
-            Log.Logger.Error(e,"Failed to get current race result!");
-            throw;
-        }
-    }
 }

@@ -11,20 +11,9 @@ public class F1GrpcService : F1Grpc.F1GrpcBase
     public override async Task<DriversChampionshipsResponse> GetDriversChampionship(DriversChampionshipsRequest request, 
         ServerCallContext context)
     {
-        DriversResponseModel? driversResponseModel = null;
-        
-        if (request.HasYear)
-        {
-            var apiResult = await F1ApiReader.GetDriversChampionshipByYearAsync(request.Year);
-
-            driversResponseModel = apiResult;
-        }
-        else
-        {
-            var apiResult = await F1ApiReader.GetCurrentDriversChampionshipAsync();
-
-            driversResponseModel = apiResult;
-        }
+        var driversResponseModel = request.HasYear 
+            ? await F1ApiReader.GetDriversChampionshipByYearAsync(request.Year)
+            : await F1ApiReader.GetCurrentDriversChampionshipAsync();
 
         List<DriversChampionships> drivers = new();
 
@@ -62,18 +51,9 @@ public class F1GrpcService : F1Grpc.F1GrpcBase
     public override async Task<ConstructorsChampionshipResponse> GetConstructorsChampionship(ConstructorsChampionshipRequest request, 
         ServerCallContext context)
     {
-        ConstructorsResponseModel? constructorsResponseModel = null;
-        
-        if (request.HasYear)
-        {
-            var apiResult = await F1ApiReader.GetConstructorsChampionshipByYearAsync(request.Year);
-            constructorsResponseModel = apiResult;
-        }
-        else
-        {
-            var apiResult = await F1ApiReader.GetCurrentConstructorsChampionshipAsync();
-            constructorsResponseModel = apiResult;
-        }
+        var constructorsResponseModel = request.HasYear
+            ? await F1ApiReader.GetConstructorsChampionshipByYearAsync(request.Year) 
+            : await F1ApiReader.GetCurrentConstructorsChampionshipAsync();
         
         List<ConstructorsChampionship> constructorsChampionships = new();
             
@@ -90,9 +70,9 @@ public class F1GrpcService : F1Grpc.F1GrpcBase
                 ClassificationId = constructors.ClassificationId,
                 TeamInfo = new Team()
                 {
-                    Name = constructors.Team.TeamName,
-                    Url = constructors.Team.Url,
-                    Country = constructors.Team.TeamNationality,
+                    Name = constructors.TeamResponse.TeamName,
+                    Url = constructors.TeamResponse.Url,
+                    Country = constructors.TeamResponse.TeamNationality,
                 }
             }));
         }

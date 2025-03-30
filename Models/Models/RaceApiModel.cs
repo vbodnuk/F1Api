@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Models.Models;
 
-public class RaceResponseModel
+public class RaceApiModel
 {
     [JsonProperty("round")]
     public int Round { get; set; }
@@ -17,18 +17,18 @@ public class RaceResponseModel
     public string Url { get; set; }
     
     [JsonProperty("circuit")]
-    public CircuitModel Circuit { get; set; }
+    public CircuitApiModel Circuit { get; set; }
     
     [JsonProperty("results")]
-    public List<RaceResultModel> Results { get; set; }
+    public List<RaceResultApiModel> Results { get; set; }
 }
 
-public class CoreRaceResponseModel: ApiCoreResponseModel
+public class RaceResponseModel: MainApiResponseModel
 {
     [JsonProperty("season")]
     public int Season { get; set; }
     
     [JsonProperty("races")]
-    public RaceResponseModel Races { get; set; }
+    public RaceApiModel Races { get; set; }
 }
 

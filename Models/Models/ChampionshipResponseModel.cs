@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Models.Models;
 
-public class ChampionshipModel
+public class ChampionshipResponseModel
 {
     [JsonProperty("championshipId")]
     public string ChampionshipId { get; set; }

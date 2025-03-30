@@ -9,13 +9,13 @@ namespace Formula1ApiConnection.Services;
 public class DatabaseSyncService : BackgroundService
 {
     private readonly F1DbContext _f1DbContext;
-    private readonly DatabaseWriter _baseWriter;
-    private static readonly CronExpression _cron = CronExpression.Parse("35 22 * * *");
+    private readonly DatabaseWriter _databaseWriter;
+    private static readonly CronExpression _cron = CronExpression.Parse("51 18 * * *");
     
-    public DatabaseSyncService(F1DbContext f1DbContext, DatabaseWriter baseWriter)
+    public DatabaseSyncService(F1DbContext f1DbContext, DatabaseWriter databaseWriter)
     {
         _f1DbContext = f1DbContext;
-        _baseWriter = baseWriter;
+        _databaseWriter = databaseWriter;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -31,7 +31,8 @@ public class DatabaseSyncService : BackgroundService
 
                 try
                 {
-                    await RacesSyncAsync();
+                    await RacesSyncTaskAsync();
+                    await DriversSyncTaskAsync();
                 }
                 catch (Exception e)
                 {
@@ -41,17 +42,30 @@ public class DatabaseSyncService : BackgroundService
         }
     }
 
-    public async Task RacesSyncAsync()
+    private async Task RacesSyncTaskAsync()
     {
-        var lastSync = await _f1DbContext.RaceResults.OrderBy(e=>e.Year).FirstOrDefaultAsync();
+        var lastSync = await _f1DbContext.RaceResults.OrderBy(r=>r.Year).FirstOrDefaultAsync();
 
         if (lastSync != null)
         {
-            await _baseWriter.WriteCurrentRaceResultAsync();
+            await _databaseWriter.WriteCurrentRaceResultAsync();
         }
         else
         {
-            await _baseWriter.WriteAllRacesAsync();
+            await _databaseWriter.WriteAllRacesAsync();
+        }
+    }
+
+    private async Task DriversSyncTaskAsync()
+    {
+        var lastSync = await _f1DbContext.Drivers.OrderBy(d => d.Year).FirstOrDefaultAsync();
+        if (lastSync != null)
+        {
+            await _databaseWriter.WriteCurrentDrivers();
+        }
+        else
+        {
+            await _databaseWriter.WriteDrivers();
         }
     }
 

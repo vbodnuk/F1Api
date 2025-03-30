@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Models.Models;
 
-public class RaceResultModel
+public class RaceResultApiModel
 {
     [JsonProperty("position")]
     public string Position { get; set; }
@@ -20,9 +20,9 @@ public class RaceResultModel
     public string FastLap { get; set; }
     
     [JsonProperty("driver")]
-    public DriversModel Driver { get; set; }
+    public DriversApiModel Driver { get; set; }
     
     [JsonProperty("team")]
-    public TeamModel Team { get; set; }
+    public TeamResponseModel TeamResponse { get; set; }
     
 }

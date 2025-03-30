@@ -31,7 +31,7 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Host.UseSerilog();
-builder.Services.AddScoped<F1ApiReader>();
+//builder.Services.AddScoped<F1ApiReader>();
 builder.Services.AddGrpc();
 builder.Services.AddScoped<DatabaseWriter>();
 builder.Services.AddScoped<DatabaseSyncService>();

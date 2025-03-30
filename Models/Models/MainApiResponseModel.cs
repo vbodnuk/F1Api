@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace Models.Models;
 
 
-public class ApiCoreResponseModel
+public class MainApiResponseModel
 {
     [JsonProperty("api")]
     public string Api { get; set; }

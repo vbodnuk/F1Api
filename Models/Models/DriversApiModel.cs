@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Models.Models;
 
-public class DriversModel
+public class DriversApiModel
 {
     [JsonProperty("driverId")]
     public string DriverId { get; set; }
@@ -27,4 +27,13 @@ public class DriversModel
     
     [JsonProperty("url")]
     public string Url { get; set; }
+}
+
+public class DriversResponseModel : MainApiResponseModel
+{
+    [JsonProperty("season")]
+    public int Season { get; set; }
+    
+    [JsonProperty("drivers")]
+    public List<DriversApiModel> Drivers { get; set; }
 }

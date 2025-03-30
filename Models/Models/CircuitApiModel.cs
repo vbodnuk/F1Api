@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Models.Models;
 
-public class CircuitModel
+public class CircuitApiModel
 {
     [JsonProperty("circuitId")]
     public string CircuitId { get; set; }

@@ -2,10 +2,13 @@ using Newtonsoft.Json;
 
 namespace Models.Models;
 
-public class ConstructorsModel
+public class DriversChampionshipsApiModel
 {
     [JsonProperty("classificationId")]
     public int ClassificationId { get; set; }
+    
+    [JsonProperty("driverId")]
+    public string DriverId { get; set; }
     
     [JsonProperty("teamId")]
     public string TeamId { get; set; }
@@ -19,11 +22,14 @@ public class ConstructorsModel
     [JsonProperty("wins")]
     public int? Wins { get; set; }
     
+    [JsonProperty("driver")]
+    public DriversApiModel Driver { get; set; }
+    
     [JsonProperty("team")]
-    public TeamModel Team { get; set; }
+    public TeamResponseModel TeamResponse { get; set; }
 }
 
-public class ConstructorsResponseModel : ApiCoreResponseModel
+public class DriversChampionshipResponseModel: MainApiResponseModel
 {
     [JsonProperty("season")]
     public int Season { get; set; }
@@ -31,6 +37,6 @@ public class ConstructorsResponseModel : ApiCoreResponseModel
     [JsonProperty("championshipId")]
     public string ChampionshipId { get; set; }
     
-    [JsonProperty("constructors_championship")]
-    public List<ConstructorsModel> ConstructorsChampionship { get; set; }
+    [JsonProperty("drivers_championship")]
+    public List<DriversChampionshipsApiModel> DriversChampionships { get; set; }
 }

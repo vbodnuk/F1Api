@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Models.Models;
 
-public class TeamModel
+public class TeamResponseModel
 {
     [JsonIgnore]
     public string TeamNationality { get; set; }
