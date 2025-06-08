@@ -47,10 +47,7 @@ public class DatabaseWriter
                         .Select(race => ToRaceResultEntity(race, round, startYear, circuitId));
                     
                     races.AddRange(raceResult);
-
-                    await _f1DbContext.RaceResults.AddRangeAsync(raceResult);
-                    await _f1DbContext.SaveChangesAsync();
-
+                    
                     emptyRace = 0;
                     Log.Logger.Information($"Races Result stored for year {startYear} round {round}");
                 }
@@ -88,7 +85,7 @@ public class DatabaseWriter
                     .Select(race => ToRaceResultEntity(race,round,DateTime.Now.Year,circuitId)).ToList();
 
                 await _f1DbContext.UpsertRacesAsync(raceResult);
-
+                
                 Log.Logger.Information($"Races Result has been written for current Year round:{round}");
             }
         }
@@ -102,7 +99,7 @@ public class DatabaseWriter
     public async Task WriteDrivers()
     {
         int startYear = 2015;
-        int year = DateTime.Now.Year;
+        int year = DateTime.Now.Year + 1;
 
         List<DriversEntity> driversList = new();
         try
@@ -147,7 +144,7 @@ public class DatabaseWriter
     }
 
 
-    protected DriversEntity ToDriversEntity(DriversApiModel driver,int year)
+    private DriversEntity ToDriversEntity(DriversApiModel driver,int year)
     {
         return new DriversEntity()
         {

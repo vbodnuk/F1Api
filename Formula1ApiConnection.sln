@@ -6,7 +6,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{22C5DF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formula1Grpc", "Formula1Grpc\Formula1Grpc.csproj", "{C52E2DC6-62FC-4FF6-B650-E0D35669C733}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "DataBase\DataBase.csproj", "{EF7C70A1-16CC-43E5-B53C-DB8BC3473594}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{EF7C70A1-16CC-43E5-B53C-DB8BC3473594}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{FB3217EC-FF51-4E86-9FA7-40443F1AF012}"
 EndProject

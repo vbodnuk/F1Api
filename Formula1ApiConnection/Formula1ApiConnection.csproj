@@ -38,7 +38,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DataBase\DataBase.csproj" />
+      <ProjectReference Include="..\Database\Database.csproj" />
       <ProjectReference Include="..\Formula1Grpc\Formula1Grpc.csproj" />
       <ProjectReference Include="..\Models\Models.csproj" />
     </ItemGroup>
